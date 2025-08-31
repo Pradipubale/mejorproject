@@ -1,0 +1,148 @@
+<% layout('layouts/boilerplate') %>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+<div class="row justify-content-center mt-5">
+  <div class="col-md-10">
+
+    <!-- Listing Title -->
+    <h3 class="mb-4 text-center"><%= listing.title %></h3>
+
+    <!-- Listing Details Card -->
+    <div class="card shadow-sm mb-4">
+     <img src="<%=listing.image.url%>" 
+     class="card-img-top show-img"
+     alt="listing_image">
+      <div class="card-body">
+        <p class="card-text"><strong>Owner:</strong> <i><%= listing.owner.username %></i></p>
+        <p class="card-text"><strong>Description:</strong> <%= listing.description %></p>
+        <p class="card-text">
+          <strong>Price:</strong>
+          <% if (listing.price) { %>
+            &#x20B9;<%= listing.price.toLocaleString("en-IN") %>
+          <% } else { %>
+            Not Available
+          <% } %>
+        </p>
+        <p class="card-text"><strong>Location:</strong> <%= listing.location %></p>
+        <p class="card-text"><strong>Country:</strong> <%= listing.country %></p>
+
+        <% if(currUser && currUser._id.equals(listing.owner._id)){ %>
+        <div class="d-flex justify-content-between mt-3">
+          <a href="/listings/<%= listing._id %>/edit" class="btn btn-warning btn-sm">
+            <i class="fas fa-edit"></i> Edit
+          </a>
+          <form action="/listings/<%= listing._id %>?_method=DELETE" method="POST"
+            onsubmit="return confirm('Are you sure you want to delete this listing?');">
+            <button class="btn btn-danger btn-sm">
+              <i class="fas fa-trash-alt"></i> Delete
+            </button>
+          </form>
+        </div>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Reviews Section -->
+    <h4 class="mt-4">Customer Reviews</h4>
+
+    <% if(currUser) { %>
+    <form action="/listings/<%= listing._id %>/reviews" method="POST" class="needs-validation" novalidate>
+      <div class="mb-3">
+        <label for="rating" class="form-label">Rating</label>
+        <div class="star-rating" style="font-size: 2rem; display: flex; gap: 5px;">
+          <% for (let i = 1; i <= 5; i++) { %>
+            <input type="radio" id="star<%= i %>" name="review[rating]" value="<%= i %>" style="display: none;" required>
+            <label for="star<%= i %>" class="star" style="color: #ccc; cursor: pointer;">★</label>
+          <% } %>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="comment" class="form-label">Comment</label>
+        <textarea name="review[comment]" id="comment" rows="4" class="form-control" placeholder="Write your review..." required></textarea>
+      </div>
+      <button class="btn btn-primary">Submit Review</button>
+    </form>
+    <% } %>
+
+    <h4 class="mt-4">All Reviews</h4>
+    <div class="row">
+      <% listing.reviews.forEach((review) => { %>
+      <div class="col-md-6 mb-3">
+        <div class="card shadow-sm border-0" style="background-color: #f9f9f9;">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h6 class="fw-bold text-primary">
+                <%= review.author ? review.author.username : "Anonymous Reviewer" %>
+              </h6>
+              <span class="text-warning">
+                <% for (let i = 1; i <= 5; i++) { %>
+                  <% if (i <= review.rating) { %>
+                    <i class="fas fa-star"></i>
+                  <% } else { %>
+                    <i class="far fa-star"></i>
+                  <% } %>
+                <% } %>
+              </span>
+            </div>
+            <p class="mb-3"><%= review.comment %></p>
+            <% if (currUser && review.author && review.author._id.equals(currUser._id)) { %>
+            <form method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" class="d-inline">
+              <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Delete this review?');">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </form>
+            <% } %>
+          </div>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+
+    <!-- Map Section (Moved Below) -->
+    <div class="mt-5">
+      <h4>Where you'll be</h4>
+      <div id="map" style="width: 100%; height: 350px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Map Script -->
+<script>
+  mapboxgl.accessToken = "<%= process.env.MAP_TOKEN %>";
+  const coordinates=<%- JSON.stringify(listing.geometry.coordinates)%>;
+  const map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/streets-v12',
+      center:coordinates,
+      zoom: 9
+  });
+  map.addControl(new mapboxgl.NavigationControl());
+  const marker = new mapboxgl.Marker({color:"red"})
+  .setLngLat(coordinates) // Example coordinates
+  .addTo(map);
+
+</script>
+
+<!-- Star Rating Script -->
+<script>
+  const stars = document.querySelectorAll('.star-rating .star');
+  const inputs = document.querySelectorAll('.star-rating input');
+
+  stars.forEach((star, index) => {
+    star.addEventListener('mouseover', () => { resetStars(); highlightStars(index); });
+    star.addEventListener('mouseout', () => { resetStars(); keepSelected(); });
+    star.addEventListener('click', () => {
+      inputs[index].checked = true;
+      resetStars(); keepSelected();
+    });
+  });
+
+  function highlightStars(index) {
+    for (let i = 0; i <= index; i++) stars[i].style.color = '#f5b301';
+  }
+  function resetStars() { stars.forEach(s => s.style.color = '#ccc'); }
+  function keepSelected() {
+    const selectedIndex = [...inputs].findIndex(input => input.checked);
+    if (selectedIndex >= 0) for (let i = 0; i <= selectedIndex; i++) stars[i].style.color = '#f5b301';
+  }
+</script>

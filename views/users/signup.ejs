@@ -1,0 +1,82 @@
+<%- layout("layouts/boilerplate") %>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-lg p-4 rounded-3">
+        <h3 class="text-center mb-4">Create Your Account</h3>
+        <form action="/signup" method="POST" class="needs-validation" novalidate>
+          
+          <!-- Username Field -->
+          <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input
+              name="username"
+              id="username"
+              type="text"
+              class="form-control"
+              placeholder="Enter your username"
+              required
+            />
+            <div class="valid-feedback">Looks good!</div>
+            <div class="invalid-feedback">Please enter a username.</div>
+          </div>
+
+          <!-- Email Field -->
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input
+              name="email"
+              id="email"
+              type="email"
+              class="form-control"
+              placeholder="Enter your email"
+              required
+            />
+            <div class="invalid-feedback">Please enter a valid email.</div>
+          </div>
+
+          <!-- Password Field -->
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input
+              name="password"
+              id="password"
+              type="password"
+              class="form-control"
+              placeholder="Enter your password"
+              required
+            />
+            <div class="invalid-feedback">Please enter a password.</div>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary btn-lg">Sign Up</button>
+          </div>
+        </form>
+
+        <!-- Extra Links -->
+        <p class="text-center mt-3">
+          Already have an account? <a href="/login" class="text-decoration-none">Log in</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap Validation Script -->
+<script>
+  (function () {
+    'use strict'
+    const forms = document.querySelectorAll('.needs-validation')
+    Array.from(forms).forEach(function (form) {
+      form.addEventListener('submit', function (event) {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+        form.classList.add('was-validated')
+      }, false)
+    })
+  })()
+</script>

@@ -1,0 +1,79 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="container mt-5">
+  <h2 class="mb-4">Create New Listing</h2>
+
+  <form action="/listings" method="POST" class="needs-validation" novalidate enctype="multipart/form-data">
+    
+    <!-- Title -->
+    <div class="mb-3">
+      <label for="title" class="form-label">Title</label>
+      <input 
+        type="text" 
+        class="form-control" 
+        id="title" 
+        name="listing[title]"   <!-- ✅ matches schema -->
+       
+    </div>
+
+    <!-- Description -->
+    <div class="mb-3">
+      <label for="description" class="form-label">Description</label>
+      <textarea 
+        class="form-control" 
+        id="description" 
+        name="listing[description]"  <!-- ✅ -->
+        </textarea>
+    </div>
+
+    <!-- Price -->
+    <div class="mb-3">
+      <label for="price" class="form-label">Price</label>
+      <input 
+        type="number" 
+        class="form-control" 
+        id="price" 
+        name="listing[price]"   <!-- ✅ -->
+      
+    </div>
+
+    <div class="mb-3">
+      <label for="image" class="form-label">Image URL</label>
+      <input 
+        type="file" 
+        class="form-control" 
+        id="image" 
+        name="listing[image]"   <!-- ✅ -->
+      
+    </div>
+
+    <!-- Location -->
+    <div class="mb-3">
+      <label for="location" class="form-label">Location</label>
+      <input 
+        type="text" 
+        class="form-control" 
+        id="location" 
+        name="listing[location]"   <!-- ✅ -->
+      
+    </div>
+
+    <!-- Country -->
+    <div class="mb-3">
+      <label for="country" class="form-label">Country</label>
+      <input 
+        type="text" 
+        class="form-control" 
+        id="country" 
+        name="listing[country]"   <!-- ✅ -->
+      
+    </div>
+
+    <!-- Image -->
+    
+
+    <!-- Submit Button -->
+    <button type="submit" class="btn btn-primary">Create Listing</button>
+    <a href="/listings" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>

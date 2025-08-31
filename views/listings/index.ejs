@@ -1,0 +1,143 @@
+<% layout('layouts/boilerplate') %>
+<%= success %>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+<style>
+#filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 2rem;
+}
+.filter {
+  text-align: center;
+  margin-right: 2rem;
+  margin-top: 1rem;
+  opacity: 0.7;
+}
+.filter:hover {
+  opacity: 1;
+  cursor: pointer;
+}
+.filter p { font-size: 0.8rem; }
+.tax-info { display: none; }
+
+/* ✅ Stylish GST toggle */
+.gst-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: 2rem;
+  padding: 8px 16px;
+  border-radius: 50px;
+  border: 2px solid #ff385c;
+  background: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.gst-toggle:hover {
+  background: #ffeef2;
+}
+
+.switch-input {
+  display: none;
+}
+
+.switch-slider {
+  position: relative;
+  width: 45px;
+  height: 22px;
+  background-color: #ccc;
+  border-radius: 50px;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.switch-slider::before {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  left: 3px;
+  bottom: 2px;
+  background-color: white;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+/* ✅ When ON → same red as search button */
+.switch-input:checked + .switch-slider {
+  background-color: #ff385c;
+}
+
+.switch-input:checked + .switch-slider::before {
+  transform: translateX(23px);
+}
+</style>
+
+<!-- Filters -->
+<div id="filters">
+  <div style="display: flex; flex-wrap: wrap; align-items: center;">
+    <div class="filter"><i class="fa-solid fa-fire"></i><p>Trending</p></div>
+    <div class="filter"><i class="fa-solid fa-bed"></i><p>Rooms</p></div>
+    <div class="filter"><i class="fa-solid fa-mountain-city"></i><p>Iconic Cities</p></div>
+    <div class="filter"><i class="fa-solid fa-mountain"></i><p>Mountain</p></div>
+    <div class="filter"><i class="fa-solid fa-person-swimming"></i><p>Pools</p></div>
+    <div class="filter"><i class="fa-solid fa-campground"></i><p>Camping</p></div>
+    <div class="filter"><i class="fa-solid fa-bed"></i><p>Frame</p></div>
+    <div class="filter"><i class="fa-solid fa-mountain-city"></i><p>Iconic Cities</p></div>
+    <div class="filter"><i class="fa-solid fa-mountain"></i><p>Mountain</p></div>
+    <div class="filter"><i class="fa-solid fa-person-swimming"></i><p>Pools</p></div>
+  </div>
+
+  <!-- ✅ New Stylish GST Toggle -->
+  <label class="gst-toggle">
+    Display total after taxes
+    <input type="checkbox" class="switch-input" id="flexSwitchCheckDefault">
+    <span class="switch-slider"></span>
+  </label>
+</div>
+
+<!-- Listings -->
+<div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 g-4 mt-3">
+  <% if (allListings && allListings.length > 0) { %>
+    <% allListings.forEach(listing => { %>
+      <div class="col">
+        <div class="card h-100">
+          <img src="<%= listing.image.url %>" class="card-img-top" alt="listing image" style="height: 20rem; object-fit: cover;" />
+          <div class="card-body">
+            <h5 class="card-title"><%= listing.title %></h5>
+            <p class="card-text">
+              <% if (listing.price) { %>
+                &#8377;<%= listing.price.toLocaleString("en-IN") %> / Night
+                <i class="tax-info"> &nbsp; &nbsp;+18% GST</i>
+              <% } else { %>
+                Price Not Available
+              <% } %>
+            </p>
+            <a href="/listings/<%= listing._id %>" class="btn btn-primary">View</a>
+          </div>
+        </div>
+      </div>
+    <% }); %>
+  <% } else { %>
+    <p class="text-center">No listings found.</p>
+  <% } %>
+</div>
+
+<script>
+let taxSwitch = document.getElementById("flexSwitchCheckDefault");
+if (taxSwitch) {
+  taxSwitch.addEventListener("click", () => {
+    let taxInfoElements = document.getElementsByClassName("tax-info");
+    for (let info of taxInfoElements) {
+      info.style.display = (info.style.display === "none" || info.style.display === "") 
+        ? "inline" 
+        : "none";
+    }
+  });
+}
+</script>
