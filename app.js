@@ -90,9 +90,6 @@ app.use((req, res, next) => {
 
 // Root route
 // Inside routes/listing.js
-app.get("/", (req, res) => {
-  res.redirect("/listings");
-});
 
 
 // Routes
