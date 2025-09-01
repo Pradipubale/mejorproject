@@ -1,7 +1,9 @@
+const Listing = require("../models/listing.js");
+
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
-
+const Listing = require("../models/listing.js");
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
