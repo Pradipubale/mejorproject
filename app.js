@@ -91,7 +91,10 @@ app.use((req, res, next) => {
 });
 
 // Root route
-// Inside routes/listing.js
+app.get("/", (req, res) => {
+  res.render("home.ejs"); // Make sure you create this file: views/home.ejs
+});
+
 
 
 // Routes
