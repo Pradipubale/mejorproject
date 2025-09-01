@@ -88,7 +88,7 @@ app.use((req, res, next) => {
 
 // Root route
 app.get("/", (req, res) => {
-  res.render("home");
+  res.render("/listings");
 });
 
 // Routes
