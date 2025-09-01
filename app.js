@@ -1,4 +1,4 @@
-const Listing = require("../models/listing.js");
+
 
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
@@ -90,9 +90,8 @@ app.use((req, res, next) => {
 
 // Root route
 // Inside routes/listing.js
-app.get("/", async (req, res) => {
-  const allListings = await Listing.find({});
-  res.render("listings/index", { listings: allListings });
+app.get("/", (req, res) => {
+  res.redirect("/listings");
 });
 
 
