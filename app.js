@@ -87,9 +87,12 @@ app.use((req, res, next) => {
 });
 
 // Root route
-app.get("/", (req, res) => {
-  res.render("/listings");
+// Inside routes/listing.js
+router.get("/", async (req, res) => {
+  const allListings = await Listing.find({});
+  res.render("listings/index", { listings: allListings });
 });
+
 
 // Routes
 app.use("/listings", listings);
