@@ -92,7 +92,7 @@ app.use((req, res, next) => {
 
 // Root route
 app.get("/", (req, res) => {
-  res.render("home.ejs"); // Make sure you create this file: views/home.ejs
+  res.render("index.ejs"); // Make sure you create this file: views/home.ejs
 });
 
 
